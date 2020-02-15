@@ -1,0 +1,6 @@
+*.pdf
+*.svg
+*/*
+
+!.gitignore
+!/backup

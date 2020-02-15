@@ -1,0 +1,96 @@
+{
+    "main" : {
+	"N_seeds" : 5,
+	"seed" : 12341,
+	"dir_name" : "hsd",
+	"dir_idx_start" : 1,
+	"model_name" : "model.ckpt",
+	"render" : false,
+	"summarize" : false,
+	"alg_name" : "hsd",
+	"save_period" : 10000,
+	"max_to_keep" : 100,
+	"save_threshold" : 0.7,
+	"N_test" : 100,
+	"test_filename" : "test_2scripted.csv",
+	"measure" : false
+    },
+    "alg" : {
+	"N_train" : 50000,
+	"N_eval" : 20,
+	"period" : 100,
+	"epsilon_start" : 0.5,
+	"epsilon_end" : 0.05,
+	"epsilon_div" : 1e3,
+	"buffer_size" : 1e5,
+	"lr_Q" : 1e-4,
+	"lr_actor" : 1e-4,
+	"lr_V" : 1e-4,
+	"lr_decoder" : 1e-4,
+	"gamma" : 0.99,
+	"tau" : 0.01,
+	"batch_size" : 256,
+	"pretrain_episodes" : 10,
+	"steps_per_train" : 10
+    },
+    "h_params" : {
+	"N_roles" : 8,
+	"steps_per_assign" : 10,
+	"N_roles_start" : 8,
+	"curriculum_threshold" : 0.86,
+	"alpha_start" : 1.0,
+	"alpha_end" : 0.6,
+	"alpha_step" : 0.01,
+	"alpha_threshold" : 0.7,
+	"N_batch_hsd" : 1000,
+	"traj_skip" : 2,
+	"obs_truncate_length" : 10,
+	"use_state_difference" : true,
+	"low_level_alg" : "iql",
+	"fixed_idx_skill" : null
+    },
+    "nn_qmix" : {
+	"n_h1" : 128,
+	"n_h2" : 128,
+	"n_h_mixer" : 64
+    },
+    "nn_hsd_scripted" : {
+	"n_h1" : 128,
+	"n_h2" : 128,
+	"n_h_mixer" : 64,
+	"n_h1_low" : 64,
+	"n_h2_low" : 64
+    },
+    "nn_iql" : {
+	"n_h1" : 128,
+	"n_h2" : 128
+    },
+    "nn_hsd" : {
+	"n_h_decoder" : 128,
+	"n_h1_low" : 64,
+	"n_h2_low" : 64,
+	"n_h1" : 128,
+	"n_h2" : 128,
+	"n_h_mixer" : 64
+    },
+    "env" : {
+	"self_play" : false,
+	"max_steps" : 500,
+	"max_tick" : 1e10,
+	"episode_max_tick" : 1e10,
+	"num_home_players" : 3,
+	"num_away_players" : 3,
+	"num_home_ai_players" : 0,
+	"num_away_ai_players" : 3,
+	"render" : "pygame",
+	"record_game_state" : false,
+	"dense_reward" : true,
+	"draw_penalty" : true,
+	"anneal_init_exp" : false,
+	"init_exp_start" : 1.0,
+	"init_exp_end" : 2.0,
+	"init_exp_div" : 10000,
+	"activate_role_reward" : false,
+	"role_reward_param_file" : null
+    }
+}
