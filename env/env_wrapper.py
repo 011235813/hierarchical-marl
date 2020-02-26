@@ -12,15 +12,14 @@ Assumptions:
 """
 
 import sys, os
-# sys.path.append('../../../')
-sys.path.append('../../MARL_Sports_Dev/')
+sys.path.append('../../sts2_mf_mcts/')
 
 import json
 import random
 
 import numpy as np
 
-from mas.nhl.environment_local import NHLEnvironmentLocalPyGame, NHLEnvironmentLocal
+from sts2.environment import STS2Environment
 
 puck_actions_3 = ['NONE', 'SHOOT', 'PASS_1', 'PASS_2', 'PASS_3']
 puck_actions_5 = ['NONE', 'SHOOT', 'PASS_1', 'PASS_2', 'PASS_3', 'PASS_4', 'PASS_5']
@@ -48,18 +47,22 @@ class Env(object):
             test: if True, turns on measurements (e.g. for testing a policy)
             N_roles: only used for extra measurements during test
         """
-        if config_main['render']:
-            self.env = NHLEnvironmentLocalPyGame(config_env)
-        else:
-            self.env = NHLEnvironmentLocal(config_env)
-
         self.N_home = config_env['num_home_players']
         self.N_away = config_env['num_away_players']
-        self.N_home_ai = config_env['num_home_ai_players']
-        self.N_away_ai = config_env['num_away_ai_players']
+        self.N_home_ai = config_env['num_home_ai_players']  # Number of home-team scripted agents
+        self.N_away_ai = config_env['num_away_ai_players']  # Number of away-team scripted agents
 
         assert self.N_home == self.N_away, "Must have equal numbers of home and away players"
         assert self.N_home == 3 or self.N_home == 5, "Only 3v3 or 5v5 supported"
+
+        self.env = STS2Environment(
+            num_home_players=self.N_home, # Number of home-team players
+            num_away_players=self.N_away, # Number of away-team players
+            num_home_agents=self.N_home - self.N_home_ai,
+            num_away_agents=self.N_away - self.N_away_ai,
+            with_pygame=config_main['render'], # Turn on pygame feature, so that you can `render()`
+            timeout_ticks=config_env['max_tick'])  # Max-length of one round of game
+        self.render = config_main['render']
 
         if self.N_home == 3:
             self.actions_home = actions_home_3
@@ -700,8 +703,8 @@ class Env(object):
 
         Returns:
             dictionary in format
-            {'h_mas_1' : {'action' : <puck action>, 'input' : <direction action>},
-             'h_mas_2' : { ... }
+            {'h_ai_1' : {'action' : <puck action>, 'input' : <direction action>},
+             'h_ai_2' : { ... }
             }
         """
         if team == 'home':
@@ -742,7 +745,7 @@ class Env(object):
             if team == 'home' and roles is not None:  # We may want show roles just for one team?
                 action['role'] = roles[idx_agent]
 
-            actions[prefix+'_mas_%d'%(idx_agent+1)] = action
+            actions[prefix+'_ai_%d'%(idx_agent+1)] = action
 
         return actions
 
@@ -796,6 +799,7 @@ class Env(object):
             actions = self.process_actions(actions_int, roles=roles, team='home')
 
         self.state_json, r, d, i = self.env.step(actions)
+        self.env.render() if self.render else None
         self.env_step += 1
         self.control_team = self.state_json['control_team']
         self.control_index = self.state_json['control_index']
@@ -855,8 +859,8 @@ class Env(object):
         """For dealing with STS2 delays."""
         actions = {}
         for idx_agent in range(self.N_home):
-            actions['h_mas_%d'%(idx_agent+1)] = {'action' : self.actions_home[0],
-                                                 'input' : [0.0, 0.0]}
+            actions['h_ai_%d'%(idx_agent+1)] = {'action' : self.actions_home[0],
+                                                'input' : [0.0, 0.0]}
         return actions
 
     def step_until_game_on(self):
@@ -866,6 +870,7 @@ class Env(object):
             # print("Step until game on, current_phase = %s" % self.state_json['current_phase'])
             actions = self.do_nothing_action()
             self.state_json, r, d, i = self.env.step(actions)
+            self.env.render() if self.render else None
             counter += 1
             if counter > 20:
                 print("env_wrapper.py : stuck in step_until_game_on() due to current_phase=%s. Manually breaking" % self.state_json['current_phase'])
@@ -891,7 +896,6 @@ class Env(object):
         self.step_until_game_on()
 
         self.state_json, status = self.env.reset()
-
         # Game is paused for some simulator steps after reset is called after a goal.
         # Take at least one extra step to check for this paused phase
         tick1 = self.state_json['tick']
@@ -899,6 +903,7 @@ class Env(object):
         while tick2 == tick1:
             # print("extra steps")
             self.state_json, r, d, i = self.env.step(self.do_nothing_action())
+            self.env.render() if self.render else None
             tick2 = self.state_json['tick']
         
         self.env_step = 0
