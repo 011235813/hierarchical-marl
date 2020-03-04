@@ -86,7 +86,7 @@ For example, to conduct 5 parallel runs with seeds 12341,12342,...,12345 and sav
 
 ## License
 
-SEPT is distributed under the terms of the BSD-3 license. All new contributions must be made under this license.
+HSD is distributed under the terms of the BSD-3 license. All new contributions must be made under this license.
 
 See [LICENSE](LICENSE) for details.
 
