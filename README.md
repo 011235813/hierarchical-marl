@@ -1,7 +1,6 @@
 # Hierarchial Cooperative Multi-Agent Reinforcement Learning with Skill Discovery (HSD)
 
 This is the code for experiments in the paper [Hierarchial Cooperative Multi-Agent Reinforcement Learning with Skill Discovery](https://arxiv.org/abs/1912.03558), published in AAMAS 2020. Ablations and baselines are included.
-The STS2 game will be released in a separate repository in the near future.
 
 
 ## Prerequisites
@@ -9,7 +8,7 @@ The STS2 game will be released in a separate repository in the near future.
 - Python version >= 3.5.2
 - TensorFlow 1.13.1
 - PyGame 1.9.4
-
+- [STS2 1.0.0](https://github.com/electronicarts/SimpleTeamSportsSimulator)
 
 ## Project structure
 

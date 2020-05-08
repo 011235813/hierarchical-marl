@@ -12,7 +12,6 @@ Assumptions:
 """
 
 import sys, os
-sys.path.append('../../sts2_mf_mcts/')
 
 import json
 import random
