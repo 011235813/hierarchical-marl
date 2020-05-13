@@ -8,7 +8,7 @@ This is the code for experiments in the paper [Hierarchial Cooperative Multi-Age
 - Python version >= 3.5.2
 - TensorFlow 1.13.1
 - PyGame 1.9.4
-- [STS2 1.0.0](https://github.com/electronicarts/SimpleTeamSportsSimulator)
+- [STS2 1.0.0](https://github.com/electronicarts/SimpleTeamSportsSimulator). In case of future API changes, our algorithm is compatible with at least this [submit](https://github.com/electronicarts/SimpleTeamSportsSimulator/tree/80b4c688a4b8fb3113f466fae5de060e29c79fbe).
 
 ## Project structure
 
