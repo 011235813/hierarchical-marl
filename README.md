@@ -75,11 +75,12 @@ For example, to conduct 5 parallel runs with seeds 12341,12342,...,12345 and sav
 ## Citation
 
 <pre>
-@article{yang2019hierarchical,
+@inproceedings{yang2020hierarchical,
   title={Hierarchical Cooperative Multi-Agent Reinforcement Learning with Skill Discovery},
   author={Yang, Jiachen and Borovikov, Igor and Zha, Hongyuan},
-  journal={arXiv preprint arXiv:1912.03558},
-  year={2019}
+  booktitle={Proceedings of the 19th International Conference on Autonomous Agents and MultiAgent Systems},
+  pages={1566--1574},
+  year={2020}
 }
 </pre>
 
